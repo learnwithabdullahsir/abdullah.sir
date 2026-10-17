@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <script>
+        // High-security barrier check before rendering anything
+        if (!sessionStorage.getItem('secure_admin_token')) {
+            alert('🚨 অ্যাক্সেস রিফিউজড! অনুমতি ছাড়া প্রবেশ নিষিদ্ধ।');
+            window.location.replace('login.html');
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Executive Control Dashboard</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        body { background-color: #0a0d1a; }
+        .dash-layout { display: flex; gap: 30px; padding: 40px 5%; max-width: 1400px; margin: 0 auto; flex-wrap: wrap; }
+        .panel-box { background-color: #12162b; border: 1px solid #242c5c; border-radius: 12px; padding: 30px; box-shadow: 0 6px 20px rgba(0,0,0,0.4); }
+        .form-side { flex: 1; min-width: 320px; }
+        .table-side { flex: 1.6; min-width: 400px; }
+        .form-title { margin-top: 0; border-bottom: 1px solid #242c5c; padding-bottom: 10px; margin-bottom: 25px; color: #00ffcc; }
+        .input-item { margin-bottom: 20px; }
+        .input-item label { display: block; margin-bottom: 8px; color: #a0aec0; font-size: 14px; }
+        select, input[type="text"] { width: 100%; padding: 12px; background-color: #1a1f3c; border: 1px solid #242c5c; border-radius: 6px; color: white; box-sizing: border-box; font-size: 15px; }
+        select:focus, input[type="text"]:focus { border-color: #00ffcc; outline: none; }
+        .action-submit-btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #007bff, #0056b3); border: none; border-radius: 6px; color: white; font-weight: 600; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        .action-submit-btn:hover { filter: brightness(1.1); }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 14px 10px; text-align: left; border-bottom: 1px solid #242c5c; }
+        th { color: #a0aec0; font-weight: 600; }
+        .row-action-btn { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; margin-right: 5px; }
+        .btn-edit { background-color: #ffc107; color: #000; }
+        .btn-delete { background-color: #dc3545; color: white; }
+        
+        .output-sync-matrix { margin-top: 35px; background-color: #1a1f3c; padding: 20px; border-radius: 8px; border: 1px dashed #00ffcc; }
+        .output-sync-matrix p { margin: 0 0 10px 0; font-size: 13px; color: #00ffcc; }
+        textarea { width: 100%; height: 120px; background-color: #0a0d1a; color: #00ffaa; border: 1px solid #242c5c; border-radius: 6px; padding: 10px; font-family: monospace; font-size: 12px; resize: none; box-sizing: border-box; }
+        .btn-copy { background-color: #28a745; color: white; margin-top: 12px; }
+    </style>
+</head>
+<body>
+
+    <header style="padding: 15px 5%;">
+        <div class="logo">🛠️ Executive Management Hub</div>
+        <nav>
+            <a href="../index.html" style="font-weight: bold; color: #00ffcc;"><i class="fas fa-home"></i> Go to Homepage</a>
+            <button onclick="logoutSession()" style="background-color: #e53e3e; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; margin-left: 15px;">Logout</button>
+        </nav>
+    </header>
+
+    <div class="dash-layout">
+        <!-- Form Component Panel -->
+        <div class="panel-box form-side animate-fade-in">
+            <h3 class="form-title">নতুন কন্টেন্ট যুক্ত করুন</h3>
+            <form id="upload-resource-form" onsubmit="saveData(event)">
+                <input type="hidden" id="item-edit-id">
+                <div class="input-item">
+                    <label>বিষয় নির্বাচন</label>
+                    <select id="field-subject">
+                        <option value="HSC ICT">HSC ICT</option>
+                        <option value="English 1st Paper">English 1st Paper</option>
+                        <option value="English 2nd Paper">English 2nd Paper</option>
+                        <option value="GK">GK (General Knowledge)</option>
+                        <option value="Mathematics">Mathematics</option>
+                    </select>
+                </div>
+                <div class="input-item">
+                    <label>টাইপ</label>
+                    <select id="field-type">
+                        <option value="Video">Video</option>
+                        <option value="PDF Document">PDF Document</option>
+                        <option value="Image Resource">Image Resource</option>
+                        <option value="Exam System">Exam System</option>
+                    </select>
+                </div>
+                <div class="input-item">
+                    <label>শিরোনাম</label>
+                    <input type="text" id="field-title" placeholder="কন্টেন্ট এর নাম লিখুন" required>
+                </div>
+                <div class="input-item">
+                    <label>রিসোর্স ইউআরএল লিংক (ইউটিউব/ফেসবুক/ক্লাউড লিংক)</label>
+                    <input type="text" id="field-url" placeholder="https://..." required>
+                </div>
+                <button type="submit" id="submit-main-btn" class="action-submit-btn">SYNC TO DATA MATRIX</button>
+            </form>
+
+            <div class="output-sync-matrix">
+                <p><i class="fas fa-sync-alt"></i> কোডটি কপি করে আপনার গিটহাবের <strong>data.js</strong> ফাইলে পেস্ট করে দিন:</p>
+                <textarea id="json-code-box" readonly></textarea>
+                <button onclick="copyGeneratedCode()" class="action-submit-btn btn-copy"><i class="fas fa-copy"></i> কোড কপি করুন</button>
+            </div>
+        </div>
+
+        <!-- Realtime Listing Component Panel -->
+        <div class="panel-box table-side animate-fade-in">
+            <h3 class="form-title">কন্টেন্ট তালিকা (Realtime Management)</h3>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>বিষয়</th>
+                            <th>টাইপ</th>
+                            <th>শিরোনাম</th>
+                            <th>অ্যাকশন</th>
+                        </tr>
+                    </thead>
+                    <tbody id="management-rows">
+                        <!-- Loaded dynamically -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="../data.js"></script>
+    <script>
+        let dataStore = [];
+
+        function initDashboard() {
+            let baseData = [];
+            if (typeof siteData !== 'undefined') {
+                baseData = siteData;
+            }
+            let activeUpdates = localStorage.getItem('abdullah_sir_dynamic_resources');
+            if (activeUpdates) {
+                try {
+                    dataStore = JSON.parse(activeUpdates);
+                } catch(e) {
+                    dataStore = baseData;
+                }
+            } else {
+                dataStore = baseData;
+                localStorage.setItem('abdullah_sir_dynamic_resources', JSON.stringify(baseData));
+            }
+            renderTableRows();
+        }
+
+        function renderTableRows() {
+            const tbody = document.getElementById('management-rows');
+            tbody.innerHTML = '';
+            
+            dataStore.forEach(item => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td style="color: #00ffcc; font-weight:600;">${item.subject}</td>
+                        <td><span style="background:#1a1f3c; padding:4px 8px; border-radius:4px; font-size:13px;">${item.type}</span></td>
+                        <td>${item.title}</td>
+                        <td>
+                            <button class="row-action-btn btn-edit" onclick="triggerEdit('${item.id}')">Edit</button>
+                            <button class="row-action-btn btn-delete" onclick="triggerDelete('${item.id}')">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+            updateCodeBox();
+        }
+
+        function saveData(e) {
+            e.preventDefault();
+            const editId = document.getElementById('item-edit-id').value;
+            const subject = document.getElementById('field-subject').value;
+            const type = document.getElementById('field-type').value;
+            const title = document.getElementById('field-title').value.trim();
+            const url = document.getElementById('field-url').value.trim();
+
+            if (editId) {
+                const targetIdx = dataStore.findIndex(d => d.id === editId);
+                if (targetIdx !== -1) {
+                    dataStore[targetIdx] = { id: editId, subject, type, title, url };
+                }
+                document.getElementById('item-edit-id').value = '';
+                document.getElementById('submit-main-btn').innerText = 'SYNC TO DATA MATRIX';
+            } else {
+                const newId = Date.now().toString();
+                dataStore.push({ id: newId, subject, type, title, url });
+            }
+
+            localStorage.setItem('abdullah_sir_dynamic_resources', JSON.stringify(dataStore));
+            document.getElementById('upload-resource-form').reset();
+            renderTableRows();
+            alert('কন্টেন্টটি সফলভাবে মেমোরিতে সেভ হয়েছে! হোমপেজে তাৎক্ষণিক দেখতে পাবেন। স্থায়ী পাবলিক আপডেটের জন্য নিচের কোডটি গিটহাবে পুশ করুন।');
+        }
+
+        function triggerEdit(id) {
+            const entry = dataStore.find(d => d.id === id);
+            if (entry) {
+                document.getElementById('item-edit-id').value = entry.id;
+                document.getElementById('field-subject').value = entry.subject;
+                document.getElementById('field-type').value = entry.type;
+                document.getElementById('field-title').value = entry.title;
+                document.getElementById('field-url').value = entry.url;
+                document.getElementById('submit-main-btn').innerText = 'UPDATE RESOURCE';
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        function triggerDelete(id) {
+            if (confirm('আপনি কি নিশ্চিত যে এই রিসোর্সটি ডিলিট করতে চান?')) {
+                dataStore = dataStore.filter(d => d.id !== id);
+                localStorage.setItem('abdullah_sir_dynamic_resources', JSON.stringify(dataStore));
+                renderTableRows();
+            }
+        }
+
+        function updateCodeBox() {
+            const txt = document.getElementById('json-code-box');
+            txt.value = `const siteData = ${JSON.stringify(dataStore, null, 2)};`;
+        }
+
+        function copyGeneratedCode() {
+            const txt = document.getElementById('json-code-box');
+            txt.select();
+            document.execCommand('copy');
+            alert('কোডটি সফলভাবে ক্লিপবোর্ডে কপি করা হয়েছে! আপনার গিটহাবের data.js ফাইলে পেস্ট করে দিন।');
+        }
+
+        function logoutSession() {
+            sessionStorage.removeItem('secure_admin_token');
+            window.location.replace('login.html');
+        }
+
+        window.onload = initDashboard;
+    </script>
+</body>
+</html>

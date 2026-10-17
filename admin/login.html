@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Login - Learn with Abdullah Sir</title>
+    <link rel="stylesheet" href="../style.css">
+    <style>
+        body { background-color: #0a0d1a; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
+        .login-card {
+            background-color: #12162b;
+            border: 1px solid #242c5c;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 400px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        .login-card h2 { margin-top: 0; margin-bottom: 25px; color: #00ffcc; font-size: 24px; }
+        .form-group { text-align: left; margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #a0aec0; font-size: 14px; }
+        input {
+            width: 100%;
+            padding: 12px;
+            background-color: #1a1f3c;
+            border: 1px solid #242c5c;
+            border-radius: 6px;
+            color: white;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        input:focus { border-color: #00ffcc; outline: none; }
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            border: none;
+            color: white;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .login-btn:hover { background-color: #0056b3; }
+        .err-msg { color: #e53e3e; font-size: 14px; margin-top: 15px; display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="login-card animate-fade-in">
+        <h2>🔒 Security Gateway</h2>
+        <form onsubmit="performLogin(event)">
+            <div class="form-group">
+                <label>ইউজারনেম</label>
+                <input type="text" id="user-field" placeholder="Username" required autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label>পাসওয়ার্ড</label>
+                <input type="password" id="pass-field" placeholder="Password" required>
+            </div>
+            <button type="submit" class="login-btn">প্যানেল ভেরিফাই করুন</button>
+            <div id="error-box" class="err-msg">ভুল ইউজারনেম অথবা পাসওয়ার্ড প্রোভাইড করা হয়েছে।</div>
+        </form>
+    </div>
+
+    <script>
+        function performLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('user-field').value.trim();
+            const p = document.getElementById('pass-field').value;
+            
+            if (u === 'admin' && p === 'admin123') {
+                const sessionKey = "SECURE_SESSION_" + btoa(u + ":" + Date.now());
+                sessionStorage.setItem('secure_admin_token', sessionKey);
+                window.location.replace('dashboard.html');
+            } else {
+                document.getElementById('error-box').style.display = 'block';
+                document.getElementById('pass-field').value = '';
+            }
+        }
+        if (sessionStorage.getItem('secure_admin_token')) {
+            window.location.replace('dashboard.html');
+        }
+    </script>
+</body>
+</html>

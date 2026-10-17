@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn with Abdullah Sir</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="logo">🎓 Learn with Abdullah Sir</div>
+        <nav>
+            <a href="index.html" class="active">Home</a>
+            <a href="admin/login.html" class="admin-btn">Admin Panel</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-container">
+        <div class="hero-content">
+            <div class="hero-text animate-fade-in">
+                <h1>জ্ঞান অর্জনের সেরা প্ল্যাটফর্ম <br><span class="highlight">Learn with Abdullah Sir</span></h1>
+                <p>এইচএসসি আইসিটি, ইংরেজি, গণিত এবং সাধারণ জ্ঞানকে একদম সহজ ও প্রাঞ্জল ভাষায় শেখার জন্য আপনার বিশ্বস্ত গাইডলাইন। ঘরে বসেই নিন সেরা ডিজিটাল প্রস্তুতি।</p>
+                <div class="cta-group">
+                    <a href="https://wa.me/8123456789" target="_blank" class="whatsapp-btn"><i class="fab fa-whatsapp"></i> হোয়াটসঅ্যাপে যোগাযোগ</a>
+                </div>
+            </div>
+            <div class="hero-image-wrapper animate-fade-in">
+                <div class="circular-frame">
+                    <img src="profile.png" alt="Abdullah Sir" onerror="this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=400&q=80'">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Counter Stats Section -->
+    <section class="stats-section">
+        <div class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-number">৫,০০০+</span>
+                <span class="stat-label">সফল শিক্ষার্থী</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">১০০+</span>
+                <span class="stat-label">এইচডি ভিডিও</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number">৫০+</span>
+                <span class="stat-label">পিডিএফ ই-বুক</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Subjects Section -->
+    <section class="subjects-section">
+        <h2>আপনার পছন্দের বিষয় নির্বাচন করুন</h2>
+        <div class="subject-grid">
+            <div class="sub-card ict" onclick="filterSubject('HSC ICT')">
+                <i class="fas fa-code"></i>
+                <h3>HSC ICT</h3>
+            </div>
+            <div class="sub-card eng1" onclick="filterSubject('English 1st Paper')">
+                <i class="fas fa-book-open"></i>
+                <h3>English 1st</h3>
+            </div>
+            <div class="sub-card eng2" onclick="filterSubject('English 2nd Paper')">
+                <i class="fas fa-pen-nib"></i>
+                <h3>English 2nd</h3>
+            </div>
+            <div class="sub-card gk" onclick="filterSubject('GK')">
+                <i class="fas fa-globe"></i>
+                <h3>General Knowledge</h3>
+            </div>
+            <div class="sub-card math" onclick="filterSubject('Mathematics')">
+                <i class="fas fa-calculator"></i>
+                <h3>Mathematics</h3>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dynamic Content Display Area -->
+    <section class="content-section">
+        <div class="content-header">
+            <h2 id="selected-subject-title">সকল রিসোর্সসমূহ</h2>
+            <button class="clear-filter-btn" onclick="clearFilter()">সব কন্টেন্ট দেখুন</button>
+        </div>
+        <div class="content-grid" id="content-display">
+            <!-- Data will load dynamically from sync matrix -->
+        </div>
+    </section>
+
+    <!-- Interactive Exam System Modal (Pop-up) -->
+    <div id="exam-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeExam()">&times;</span>
+            <div class="modal-header">
+                <h3>📝 অনলাইন লাইভ পরীক্ষা</h3>
+                <p id="exam-title-modal">টপিক লোড হচ্ছে...</p>
+            </div>
+            <form id="quiz-form" onsubmit="submitQuiz(event)">
+                <div class="quiz-question">
+                    <p><strong>১. প্রদত্ত টপিকের উপর আপনার প্রস্তুতি যাচাই করতে সঠিক বিকল্পটি নির্বাচন করুন:</strong></p>
+                    <label class="quiz-option"><input type="radio" name="q1" value="a"> ক) প্রথম বিকল্প</label>
+                    <label class="quiz-option"><input type="radio" name="q1" value="correct"> খ) দ্বিতীয় বিকল্প (সঠিক উত্তর)</label>
+                    <label class="quiz-option"><input type="radio" name="q1" value="c"> গ) তৃতীয় বিকল্প</label>
+                </div>
+                <button type="submit" class="submit-btn">উত্তর সাবমিট করুন</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Professional Footer with Social Links -->
+    <footer>
+        <div class="footer-container">
+            <p>© 2026 Learn with Abdullah Sir. All Rights Reserved.</p>
+            <div class="social-links">
+                <a href="https://www.facebook.com/yourpage" target="_blank" class="fb-link"><i class="fab fa-facebook-f"></i> Facebook Page</a>
+                <a href="https://www.facebook.com/groups/yourgroup" target="_blank" class="fb-group-link"><i class="fab fa-facebook"></i> Facebook Group</a>
+                <a href="https://www.youtube.com/yourchannel" target="_blank" class="yt-link"><i class="fab fa-youtube"></i> YouTube Channel</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Core Cross-Page Synchronization Engine Script -->
+    <script src="data.js"></script>
+    <script>
+        let fullData = [];
+        let currentFilter = null;
+
+        function loadSynchronizedData() {
+            // Load base backup file dataset
+            let baseData = [];
+            if (typeof siteData !== 'undefined') {
+                baseData = siteData;
+            }
+            
+            // Fetch dynamic local user modifications
+            let localUpdates = localStorage.getItem('abdullah_sir_dynamic_resources');
+            if (localUpdates) {
+                try {
+                    fullData = JSON.parse(localUpdates);
+                } catch(e) {
+                    fullData = baseData;
+                }
+            } else {
+                fullData = baseData;
+                localStorage.setItem('abdullah_sir_dynamic_resources', JSON.stringify(baseData));
+            }
+            renderView(fullData);
+        }
+
+        function renderView(dataset) {
+            const display = document.getElementById('content-display');
+            display.innerHTML = '';
+            
+            if (dataset.length === 0) {
+                display.innerHTML = `
+                    <div class="no-data-box">
+                        <i class="fas fa-folder-open"></i>
+                        <p>এই ক্যাটাগরিতে কোনো অ্যাক্টিভ কন্টেন্ট পাওয়া যায়নি।</p>
+                    </div>`;
+                return;
+            }
+
+            dataset.forEach(item => {
+                let actionMarkup = '';
+                
+                if (item.type === 'Video') {
+                    if (item.url.includes('youtube.com') || item.url.includes('youtu.be')) {
+                        let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+                        let match = item.url.match(regExp);
+                        let videoId = (match && match[2].length == 11) ? match[2] : null;
+                        if(videoId) {
+                            actionMarkup = `<iframe class="video-frame" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
+                        } else {
+                            actionMarkup = `<a href="${item.url}" target="_blank" class="action-btn-link"><i class="fas fa-play-circle"></i> ভিডিওটি দেখুন</a>`;
+                        }
+                    } else if (item.url.includes('facebook.com')) {
+                        actionMarkup = `<iframe class="video-frame" src="https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(item.url)}&show_text=0" scrolling="no" frameborder="0" allowTransparency="true" allowFullScreen="true"></iframe>`;
+                    } else {
+                        actionMarkup = `<a href="${item.url}" target="_blank" class="action-btn-link"><i class="fas fa-external-link-alt"></i> প্লে লিঙ্ক দেখুন</a>`;
+                    }
+                } else if (item.type === 'PDF Document') {
+                    actionMarkup = `<a href="${item.url}" target="_blank" class="action-btn-link pdf-accent"><i class="fas fa-file-pdf"></i> লেকচার শিট ডাউনলোড (PDF)</a>`;
+                } else if (item.type === 'Image Resource') {
+                    actionMarkup = `
+                        <div class="img-wrapper">
+                            <img src="${item.url}" alt="Resource Graphic" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=400&q=80'">
+                        </div>
+                        <a href="${item.url}" target="_blank" class="action-btn-link img-accent"><i class="fas fa-expand"></i> ফুল ইমেজ ভিউ</a>`;
+                } else if (item.type === 'Exam System') {
+                    actionMarkup = `<button class="action-btn-link exam-accent" onclick="openExam('${item.title}')"><i class="fas fa-edit"></i> লাইভ পরীক্ষায় অংশ নাও</button>`;
+                }
+
+                display.innerHTML += `
+                    <div class="content-card animate-fade-in">
+                        <span class="subject-badge">${item.subject}</span>
+                        <div class="card-body">
+                            <span class="type-indicator"><i class="fas fa-tag"></i> ${item.type}</span>
+                            <h3>${item.title}</h3>
+                            <div class="media-hook">${actionMarkup}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterSubject(sub) {
+            currentFilter = sub;
+            document.getElementById('selected-subject-title').innerText = sub + " - এর সিলেক্টেড রিসোর্স";
+            const filtered = fullData.filter(d => d.subject === sub);
+            renderView(filtered);
+        }
+
+        function clearFilter() {
+            currentFilter = null;
+            document.getElementById('selected-subject-title').innerText = "সকল রিসোর্সসমূহ";
+            renderView(fullData);
+        }
+
+        function openExam(title) {
+            document.getElementById('exam-modal').style.display = 'flex';
+            document.getElementById('exam-title-modal').innerText = "টপিক: " + title;
+        }
+
+        function closeExam() {
+            document.getElementById('exam-modal').style.display = 'none';
+        }
+
+        function submitQuiz(e) {
+            e.preventDefault();
+            alert('আপনার উত্তর ডাটাবেজে সাবমিট হয়েছে এবং মূল্যায়ন সম্পন্ন হয়েছে!');
+            closeExam();
+        }
+
+        window.onload = loadSynchronizedData;
+    </script>
+</body>
+</html>
