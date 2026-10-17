@@ -71,7 +71,7 @@
             const u = document.getElementById('user-field').value.trim();
             const p = document.getElementById('pass-field').value;
             
-            if (u === 'admin' && p === 'admin123') {
+            if (u === 'admin' && p === 'admin#123#') {
                 const sessionKey = "SECURE_SESSION_" + btoa(u + ":" + Date.now());
                 sessionStorage.setItem('secure_admin_token', sessionKey);
                 window.location.replace('dashboard.html');
